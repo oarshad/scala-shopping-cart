@@ -1,6 +1,6 @@
 package com.arshado.service
 
-import com.arshado.domain.ProductItem
+import com.arshado.domain.{Offer, ProductItem}
 import com.arshado.service.MemoryProductService.products
 
 /**
@@ -20,8 +20,8 @@ trait ProductService {
 object MemoryProductService {
 
   private val products = Map(
-    "APPLE" -> ProductItem("Apple", 60),
-    "ORANGE" -> ProductItem("Orange", 25)
+    "APPLE" -> ProductItem("Apple", 60, Some(Offer(2, 1))),
+    "ORANGE" -> ProductItem("Orange", 25, Some(Offer(3, 2)))
   )
 
 }

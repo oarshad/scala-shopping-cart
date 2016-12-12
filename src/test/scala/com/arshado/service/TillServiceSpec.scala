@@ -14,13 +14,43 @@ object TillServiceSpec {
 
 class TillServiceSpec extends FlatSpec with TillServiceBehavior {
 
-  "Input with zero products" should behave like addToBasketAndCheckout(TestData(input = Array(), total = 0, itemsCount = 0, invalidCount = 0))
+  "Input with zero products" should behave like addToBasketAndCheckout(TestData(input = Array()))
 
-  "Input with two products" should behave like addToBasketAndCheckout(TestData(input = Array(apple, orange), total = 85, itemsCount = 2, invalidCount = 0))
+  "Input with two products" should behave like addToBasketAndCheckout(
+    TestData(input = Array(apple, orange), total = 85, itemsCount = 2)
+  )
 
-  "Input with valid and invalid products" should behave like addToBasketAndCheckout(TestData(input = Array(apple, invalid, orange, invalid), total = 85, itemsCount = 2, invalidCount = 2))
+  "Input with valid and invalid products" should behave like addToBasketAndCheckout(
+    TestData(input = Array(apple, invalid, orange, invalid), total = 85, itemsCount = 2, invalidCount = 2)
+  )
 
-  "Input with invalid products" should behave like addToBasketAndCheckout(TestData(input = Array(invalid), total = 0, itemsCount = 0, invalidCount = 1))
+  "Input with invalid products" should behave like addToBasketAndCheckout(
+    TestData(input = Array(invalid), invalidCount = 1)
+  )
+
+  "Multiple Products Qty which doesn't qualify for offers" should behave like addToBasketAndCheckout(
+    TestData(input = Array(apple, orange, orange), total = 110, itemsCount = 3)
+  )
+
+  "Apple qty qualifying for offer" should behave like addToBasketAndCheckout(
+    TestData(input = Array(apple, apple), total = 60, itemsCount = 2)
+  )
+
+  "Apple qty qualifying for offer and without qualifying for offer" should behave like addToBasketAndCheckout(
+    TestData(input = Array(apple, apple, apple), total = 120, itemsCount = 3)
+  )
+
+  "Oranges qty qualifying for offer" should behave like addToBasketAndCheckout(
+    TestData(input = Array(orange, orange, orange), total = 50, itemsCount = 3)
+  )
+
+  "Oranges qty qualifying for offer and withough qualifying for offer" should behave like addToBasketAndCheckout(
+    TestData(input = Array(orange, orange, orange, orange), total = 75, itemsCount = 4)
+  )
+
+  "Mixed Products qty qualifying for offer" should behave like addToBasketAndCheckout(
+    TestData(input = Array(apple, apple, orange, orange, orange), total = 110, itemsCount = 5)
+  )
 
 }
 
@@ -52,4 +82,4 @@ trait TillServiceBehavior extends Matchers {
   * @param itemsCount Expected Number of Items
   * @param invalidCount Expected Number of Invalid Item Codes
   */
-case class TestData(input: Array[String], total: Int, itemsCount: Int, invalidCount: Int)
+case class TestData(input: Array[String], total: Int = 0, itemsCount: Int = 0, invalidCount: Int = 0)

@@ -29,8 +29,10 @@ class TillService(input: Array[String]) extends ProductService{
   /**
     * Calculates basket total
     */
-  lazy val total = items.foldLeft(0){
-      case (sum, product) => sum + product.price
+  lazy val total = items.groupBy(p => p).foldLeft(0) {
+    case (sum, (ProductItem(_, price, Some(offer)), products)) =>
+      sum + (price * ((products.length % offer.getQty) + (products.length / offer.getQty * offer.forPriceOfQty)))
+    case (sum, (ProductItem(_, price, _), products)) => sum + (price * products.length)
   }
 
   /**
